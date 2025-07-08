@@ -152,7 +152,7 @@ def get_content(url, api, params=None, **kwds):
                 reason = resp.json()['message']
             except:
                 reason = ""
-        raise error_type(reason)
+        raise error_type(reason, resp)
     except (JSONDecodeError, KeyError):
         resp.raise_for_status()
     return resp
