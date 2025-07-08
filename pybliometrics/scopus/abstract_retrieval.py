@@ -351,7 +351,7 @@ class AbstractRetrieval(Retrieval):
         if len(isbns) == 0:
             return None
         else:
-            return tuple((i['$'] for i in isbns))
+            return tuple((i['$'] if isinstance(i, dict) else i for i in isbns))
 
     @property
     def issn(self) -> Optional[namedtuple]:

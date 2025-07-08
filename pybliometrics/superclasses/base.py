@@ -124,6 +124,7 @@ class Base:
             # Set private variables
             self._mdate = time()
             self._header = header
+            self._status = resp.status_code
             # Finally write data unless download=False
             if download:
                 if obj_retrieval:
