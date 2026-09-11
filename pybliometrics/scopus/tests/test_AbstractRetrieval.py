@@ -32,6 +32,12 @@ ar10 = AbstractRetrieval('10.1109/Multi-Temp.2019.8866947', view='ENTITLED', ref
 ab11 = AbstractRetrieval('2-s2.0-85160105660', view="REF", refresh=30)
 # FULL view with list of collaborations
 ab12 = AbstractRetrieval('2-s2.0-85044008512', view='FULL', refresh=30)
+# List of contributors in contributor group
+ab13 = AbstractRetrieval("2-s2.0-85038825012", view="FULL", refresh=30)
+# None in confcode
+ab14 = AbstractRetrieval("2-s2.0-79960092540", view="FULL", refresh=30)
+# Single isbn
+ab15 = AbstractRetrieval("2-s2.0-14544289566", view="FULL", refresh=30)
 
 
 def test_abstract():
@@ -127,6 +133,7 @@ def test_chemials():
 def test_confcode():
     assert ab2.confcode == 44367
     assert ab8.confcode is None
+    assert ab14.confcode is None
 
 
 def test_confdate():
@@ -167,6 +174,11 @@ def test_contributor_group():
     assert expected in received
     assert ab3.contributor_group is None
     assert ab8.contributor_group is None
+
+    expected_13 = Contributor(given_name='Constantinos', initials='C.', surname='Antoniou',
+                    indexed_name='Antoniou C.', role='edit')
+    assert len(ab13.contributor_group) == 4
+    assert ab13.contributor_group[0] == expected_13
 
 
 def test_copyright():
@@ -284,11 +296,13 @@ def test_get_latex():
 
 
 def test_get_ris():
-    e = 'TY  - JOUR\nTI  - Examples of effective data sharing in scientific '\
-        'publishing\nJO  - ACS Catalysis\nVL  - 5\nDA  - 2015-06-05\nPY  - '\
-        '2015\nSP  - 3894-3899\nAU  - Kitchin J.R.\nDO  - 10.1021/'\
-        'acscatal.5b00538\nUR  - https://doi.org/10.1021/acscatal.5b00538\n'\
-        'IS  - 6\nER  - \n\n'
+    e = (
+        "TY  - JOUR\nTI  - Examples of effective data sharing in scientific "
+        "publishing\nJO  - ACS Catalysis\nDA  - 2015-06-05\nPY  - "
+        "2015\nAU  - Kitchin J.R.\nDO  - 10.1021/acscatal.5b00538\n"
+        "UR  - https://doi.org/10.1021/acscatal.5b00538\nVL  - 5\n"
+        "IS  - 6\nSP  - 3894-3899\nER  - \n\n"
+    )
     assert ab1.get_ris() == e
 
 
@@ -311,6 +325,7 @@ def test_isbn():
     assert ab3.isbn is None
     assert ab5.isbn == ('0203881486', '9780203881484')
     assert ab8.isbn is None
+    assert ab15.isbn == ('0780385969',)
 
 
 def test_issn():
